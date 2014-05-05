@@ -2,6 +2,13 @@
 /*globals require, exports, console, Error */
 "use strict";
 var http = require('http');
+/**
+ * Create a custom error class based on an HTTP status code
+ *
+ * @public
+ * @param   {Number}    code
+ * @return  {Error}
+ */
 exports.createHTTPError = function createHTTPError (code) {
     function HTTPError (message) {
         Error.captureStackTrace(this, HTTPError);
