@@ -1,12 +1,11 @@
 /*jshint node: true */
 /*globals require, exports, console, Error */
-
-
 "use strict";
 var http = require('http');
 /**
  * Create a custom error class based on an HTTP status code
  *
+ * @function createHTTPError
  * @public
  * @param   {Number}    code    The HTTP status code to derive the error message from
  * @return  {HTTPError}
