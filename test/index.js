@@ -11,30 +11,40 @@ describe('HTTP Errors', function () {
         Constructor.should.have.property('prototype');
         Constructor.prototype.should.be.type('object');
         Constructor.prototype.should.have.property('constructor');
-        done();
+        return done();
     });
-    it('should extend the built-in Error type properly', function (done) {
-        var Constructor = errors.NotFoundError;
-        var error = new Constructor('Testing');
+    it('should extend the built-in Error type properly when called with new', function (done) {
+        var Constructor = errors.createHTTPError(404);
+        var error = new Constructor();
         error.should.be.instanceOf(Error);
         error.should.be.instanceOf(Constructor);
         Error.prototype.isPrototypeOf(error).should.equal(true);
-        error.toString().should.be.equal([
-            '404 ',
-            http.STATUS_CODES[404],
-            ': Testing'
-        ].join(''));
+        error.toString().should.be.equal('404 ' + http.STATUS_CODES[404]);
         error.should.have.property('message');
         error.should.not.have.enumerable('message');
-        error.message.should.equal('Testing');
-        done();
+        error.should.have.property('name');
+        error.should.not.have.enumerable('name');
+        return done();
+    });
+    it('should extend the built-in Error type properly when called bare', function (done) {
+        var constructor = errors.createHTTPError(404);
+        var error = constructor();
+        error.should.be.instanceOf(Error);
+        error.should.be.instanceOf(constructor);
+        Error.prototype.isPrototypeOf(error).should.equal(true);
+        error.toString().should.be.equal('404 ' + http.STATUS_CODES[404]);
+        error.should.have.property('message');
+        error.should.not.have.enumerable('message');
+        error.should.have.property('name');
+        error.should.not.have.enumerable('name');
+        return done();
     });
     it('should have a proper stack trace', function (done) {
         var error = new errors.NotFoundError('Testing');
         error.should.have.property('stack');
         error.should.not.have.enumerable('stack');
         error.stack.should.containEql('test/index.js');
-        done();
+        return done();
     });
     it('should have a proper code property', function (done) {
         var error = new errors.NotFoundError('Testing');
@@ -42,13 +52,13 @@ describe('HTTP Errors', function () {
         error.should.not.have.enumerable('code');
         error.code.should.be.equal(404);
         error.code.should.be.exactly(404);
-        done();
+        return done();
     });
     it('should have a proper status property', function (done) {
         var error = new errors.NotFoundError('Testing');
         error.should.have.property('status');
         error.should.not.have.enumerable('status');
         error.status.should.be.equal(http.STATUS_CODES[404]);
-        done();
+        return done();
     });
 });
