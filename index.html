@@ -1,3 +1,74 @@
-<!DOCTYPE html><html lang="en"><head><title>index</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content=""><meta name="groc-document-path" content="index"><meta name="groc-project-path" content="README.md"><meta name="groc-github-url" content="https://github.com/jproulx/node-http-error"><link rel="stylesheet" type="text/css" media="all" href="assets/style.css"><script type="text/javascript" src="assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/jproulx/node-http-error/blob/master/README.md">README.md</a></div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="node-http-error">node-http-error</h1>
+<!DOCTYPE html><html lang="en"><head><title>index</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content=""><meta name="groc-document-path" content="index"><meta name="groc-project-path" content="index.js"><meta name="groc-github-url" content="https://github.com/jproulx/node-http-error"><link rel="stylesheet" type="text/css" media="all" href="assets/style.css"><script type="text/javascript" src="assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/jproulx/node-http-error/blob/master/index.js">index.js</a></div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="cm">/*jshint node: true */</span>
+<span class="cm">/*globals require, exports, console, Error */</span>
 
-<p>Custom error classes based on HTTP statuses</p></div></div></div></div></body></html>
+
+<span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;http&#39;</span><span class="p">);</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-public"><div class="wrapper"><p><span class='doc-section-header'>Public</span></p>
+
+<p>Create a custom error class based on an HTTP status code</p>
+
+<p>Parameters:</p>
+
+<ul>
+<li><strong>code must be a Number.</strong><br/>(The HTTP status code to derive the error message from)</li>
+</ul>
+
+<p><strong>Returns a HTTPError</strong></p>
+
+<p>Example:</p>
+
+<pre><code>var errors = require('errors');
+throw new errors.NotFoundError('/missing');
+</code></pre></div></div><div class="code"><div class="wrapper"><span class="nx">exports</span><span class="p">.</span><span class="nx">createHTTPError</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">createHTTPError</span> <span class="p">(</span><span class="nx">code</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="nx">HTTPError</span> <span class="p">(</span><span class="nx">message</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Check to see if this was called with the <code>new</code> operator</p></div></div><div class="code"><div class="wrapper">        <span class="k">if</span> <span class="p">(</span><span class="k">this</span> <span class="k">instanceof</span> <span class="nx">HTTPError</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">properties</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;name&#39;</span> <span class="o">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;value&#39;</span>        <span class="o">:</span> <span class="p">[</span><span class="nx">code</span><span class="p">,</span> <span class="nx">http</span><span class="p">.</span><span class="nx">STATUS_CODES</span><span class="p">[</span><span class="nx">code</span><span class="p">]].</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">),</span>
+                    <span class="s1">&#39;enumerable&#39;</span>   <span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+                    <span class="s1">&#39;writable&#39;</span>     <span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+                    <span class="s1">&#39;configurable&#39;</span> <span class="o">:</span> <span class="kc">true</span>
+                <span class="p">},</span>
+                <span class="s1">&#39;code&#39;</span> <span class="o">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;value&#39;</span>        <span class="o">:</span> <span class="nb">Number</span><span class="p">(</span><span class="nx">code</span><span class="p">),</span>
+                    <span class="s1">&#39;enumerable&#39;</span>   <span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+                    <span class="s1">&#39;writable&#39;</span>     <span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+                    <span class="s1">&#39;configurable&#39;</span> <span class="o">:</span> <span class="kc">true</span>
+                <span class="p">},</span>
+                <span class="s1">&#39;status&#39;</span> <span class="o">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;value&#39;</span>        <span class="o">:</span> <span class="nx">http</span><span class="p">.</span><span class="nx">STATUS_CODES</span><span class="p">[</span><span class="nx">code</span><span class="p">],</span>
+                    <span class="s1">&#39;enumerable&#39;</span>   <span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+                    <span class="s1">&#39;writable&#39;</span>     <span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+                    <span class="s1">&#39;configurable&#39;</span> <span class="o">:</span> <span class="kc">true</span>
+                <span class="p">}</span>
+            <span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>A preferred method for inheriting a class in Javascript
+is to call its constructor within the subclass with the same arguments.
+However, when Error is called as a function rather than as a constructor,
+it creates and initialises a new Error object instead, as a language shortcut.
+Hence: <code>new Error(message)</code> is functionally equivalent to <code>Error(message)</code>;
+What we can do instead is to set the common properties (name, message)
+directly on this object as it is being constructed and mark them as non-enumerable.
+We also set a few new properties based on the status code.</p></div></div><div class="code"><div class="wrapper">            <span class="kd">var</span> <span class="nx">proxy</span> <span class="o">=</span> <span class="nb">Error</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Capture the stack trace and ignore the wrapper functions in the stack.
+We capture this trace on the proxy object then copy it over later.</p></div></div><div class="code"><div class="wrapper">            <span class="nb">Error</span><span class="p">.</span><span class="nx">captureStackTrace</span><span class="p">(</span><span class="nx">proxy</span><span class="p">,</span> <span class="nx">HTTPError</span><span class="p">);</span>
+            <span class="nb">Object</span><span class="p">.</span><span class="nx">getOwnPropertyNames</span><span class="p">(</span><span class="nx">proxy</span><span class="p">).</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">property</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">properties</span><span class="p">[</span><span class="nx">property</span><span class="p">]</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">getOwnPropertyDescriptor</span><span class="p">(</span><span class="nx">proxy</span><span class="p">,</span> <span class="nx">property</span><span class="p">);</span>
+            <span class="p">});</span>
+            <span class="nb">Object</span><span class="p">.</span><span class="nx">defineProperties</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">properties</span><span class="p">);</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Otherwise assume it was called as a bare function and mimic the language shorthand</p></div></div><div class="code"><div class="wrapper">        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="nx">HTTPError</span><span class="p">(</span><span class="nx">message</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Borrow from Node's <code>util.inherits</code> method, assign the correct prototype
+and constructor to the new error class</p></div></div><div class="code"><div class="wrapper">    <span class="nx">HTTPError</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nb">Error</span><span class="p">.</span><span class="nx">prototype</span><span class="p">,</span> <span class="p">{</span>
+        <span class="s1">&#39;constructor&#39;</span> <span class="o">:</span> <span class="p">{</span>
+            <span class="s1">&#39;value&#39;</span>        <span class="o">:</span> <span class="nx">HTTPError</span><span class="p">,</span>
+            <span class="s1">&#39;enumerable&#39;</span>   <span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+            <span class="s1">&#39;writable&#39;</span>     <span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+            <span class="s1">&#39;configurable&#39;</span> <span class="o">:</span> <span class="kc">true</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+    <span class="k">return</span> <span class="nx">HTTPError</span><span class="p">;</span>
+<span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>For each defined error code in the built-in list of statuses, create a corresponding error object
+and export it</p></div></div><div class="code"><div class="wrapper"><span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nx">STATUS_CODES</span><span class="p">).</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">code</span><span class="p">,</span> <span class="nx">index</span><span class="p">,</span> <span class="nx">list</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">code</span> <span class="o">&gt;=</span> <span class="mi">400</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">name</span> <span class="o">=</span> <span class="nx">http</span><span class="p">.</span><span class="nx">STATUS_CODES</span><span class="p">[</span><span class="nx">code</span><span class="p">].</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">).</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/[^a-z]/gi</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;Error&#39;</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">[</span><span class="nx">name</span><span class="p">]</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">createHTTPError</span><span class="p">(</span><span class="nx">code</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}.</span><span class="nx">bind</span><span class="p">(</span><span class="nx">exports</span><span class="p">));</span></div></div></div></div></body></html>
