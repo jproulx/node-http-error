@@ -6,35 +6,25 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
 
   tableOfContents = [
     {
-      "type": "folder",
+      "type": "file",
       "data": {
-        "path": "test",
-        "title": "test"
+        "language": {
+          "nameMatchers": [".js"],
+          "pygmentsLexer": "javascript",
+          "multiLineComment": ["/*", "*", "*/"],
+          "singleLineComment": ["//"],
+          "ignorePrefix": "}",
+          "foldPrefix": "^",
+          "name": "JavaScript"
+        },
+        "sourcePath": "/Users/jproulx/Projects/node-http-errors/index.js",
+        "projectPath": "index.js",
+        "targetPath": "index",
+        "pageTitle": "index",
+        "title": "index"
       },
       "depth": 1,
-      "children": [
-        {
-          "type": "file",
-          "data": {
-            "language": {
-              "nameMatchers": [".js"],
-              "pygmentsLexer": "javascript",
-              "multiLineComment": ["/*", "*", "*/"],
-              "singleLineComment": ["//"],
-              "ignorePrefix": "}",
-              "foldPrefix": "^",
-              "name": "JavaScript"
-            },
-            "sourcePath": "/Users/jproulx/Projects/node-http-errors/test/index.js",
-            "projectPath": "test/index.js",
-            "targetPath": "test/index",
-            "pageTitle": "test/index",
-            "title": "index"
-          },
-          "depth": 2,
-          "outline": []
-        }
-      ]
+      "outline": []
     }
   ];
 
