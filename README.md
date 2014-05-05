@@ -2,24 +2,20 @@ http-custom-errors
 ==================
 [![Build Status](https://travis-ci.org/jproulx/node-http-error.svg?branch=master)](https://travis-ci.org/jproulx/node-http-error)
 
-Custom error classes based on HTTP statuses, designed to emulate the language specifications for Error types as best as possible.
-
+Custom error classes based on HTTP statuses, designed to emulate the language specifications for Error exceptions as best as possible.
 ## Install
 ```bash
 npm install http-custom-errors
 ```
-
 ## Usage
 ```js
 var HTTPErrors = require('http-custom-errors');
 var error = createHTTPError(500); // Create a "500 Internal Server Error" exception
 throw new HTTPErrors.NotFoundError('/missing'); // Throw a "404 Not Found Error" exception
 ```
-
 The `createHTTPError(code);` function export will inherit and return a new error exception, with the additional `code` and `status` fields that correspond to the HTTP Server Statuses advertised by node's internal HTTP module.
 
 One practical use would allow you to use a polymorphic error handler with `express.js`:
-
 ```js
 app.use(function (err, res, req, next) {
   res.status(err.code || 500);
@@ -36,9 +32,7 @@ app.use(function (err, res, req, next) {
   res.type('txt').send(err.message || 'Server Error');
 });
 ```
-
 With this middleware you would be able to simply throw the appropriate HTTP status error in the right situation:
-
 ```js
 app.use(function (req, res, next) {
     throw new HTTPErrors.NotFoundError(req.url);
@@ -53,7 +47,6 @@ app.get('/sensitive', authorize, function (req, res, next) {
     return res.render('logged_in');
 });
 ```
-
 Additionally, each error type is exposed as its own Error constructor, the following are available:
 
 * ```BadRequestError(code);```
@@ -94,6 +87,9 @@ Additionally, each error type is exposed as its own Error constructor, the follo
 * ```BandwidthLimitExceededError(code);```
 * ```NotExtendedError(code);```
 * ```NetworkAuthenticationRequiredError(code);```
+
+## Source
+Annotated source code is available at http://jproulx.github.io/node-http-error
 
 ## Notes
 Care is taken to preserve the built-in error handling behavior as much as possible, with support for checking `instanceof` and `typeof`, as well as making sure the error constructor behaves the same whether it is called with the `new` operator or not.
