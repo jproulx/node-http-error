@@ -10,7 +10,7 @@ npm install http-custom-errors
 ## Usage
 ```js
 var HTTPErrors = require('http-custom-errors');
-var error = createHTTPError(500); // Create a "500 Internal Server Error" exception
+var error = HTTPErrors.createHTTPError(500); // Create a "500 Internal Server Error" exception
 throw new HTTPErrors.NotFoundError('/missing'); // Throw a "404 Not Found Error" exception
 ```
 The `createHTTPError(code);` function export will inherit and return a new error exception, with the additional `code` and `status` fields that correspond to the HTTP Server Statuses advertised by node's internal HTTP module.
