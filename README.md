@@ -34,9 +34,6 @@ app.use(function (err, res, req, next) {
 ```
 With this middleware you would be able to simply throw the appropriate HTTP status error in the right situation:
 ```js
-app.use(function (req, res, next) {
-    throw new HTTPErrors.NotFoundError(req.url);
-});
 function authorize (req, res, next) {
     if (// not authorized logic) {
         return next(new HTTPErrors.ForbiddenError('Please log in'));
@@ -46,47 +43,50 @@ function authorize (req, res, next) {
 app.get('/sensitive', authorize, function (req, res, next) {
     return res.render('logged_in');
 });
+app.use(function (req, res, next) {
+    throw new HTTPErrors.NotFoundError(req.url);
+});
 ```
-Additionally, each error type is exposed as its own Error constructor, the following are available:
+Additionally, each error type is exposed as its own Error constructor:
 
-* ```BadRequestError(code);```
-* ```UnauthorizedError(code);```
-* ```PaymentRequiredError(code);```
-* ```ForbiddenError(code);```
-* ```NotFoundError(code);```
-* ```MethodNotAllowedError(code);```
-* ```NotAcceptableError(code);```
-* ```ProxyAuthenticationRequiredError(code);```
-* ```RequestTimeoutError(code);```
-* ```ConflictError(code);```
-* ```GoneError(code);```
-* ```LengthRequiredError(code);```
-* ```PreconditionFailedError(code);```
-* ```RequestEntityTooLargeError(code);```
-* ```RequestURITooLargeError(code);```
-* ```UnsupportedMediaTypeError(code);```
-* ```RequestedRangeNotSatisfiableError(code);```
-* ```ExpectationFailedError(code);```
-* ```ImateapotError(code);```
-* ```UnprocessableEntityError(code);```
-* ```LockedError(code);```
-* ```FailedDependencyError(code);```
-* ```UnorderedCollectionError(code);```
-* ```UpgradeRequiredError(code);```
-* ```PreconditionRequiredError(code);```
-* ```TooManyRequestsError(code);```
-* ```RequestHeaderFieldsTooLargeError(code);```
-* ```InternalServerError(code);```
-* ```NotImplementedError(code);```
-* ```BadGatewayError(code);```
-* ```ServiceUnavailableError(code);```
-* ```GatewayTimeoutError(code);```
-* ```HTTPVersionNotSupportedError(code);```
-* ```VariantAlsoNegotiatesError(code);```
-* ```InsufficientStorageError(code);```
-* ```BandwidthLimitExceededError(code);```
-* ```NotExtendedError(code);```
-* ```NetworkAuthenticationRequiredError(code);```
+* `HTTPErrors.BadRequestError(message);`
+* `HTTPErrors.UnauthorizedError(message);`
+* `HTTPErrors.PaymentRequiredError(message);`
+* `HTTPErrors.ForbiddenError(message);`
+* `HTTPErrors.NotFoundError(message);`
+* `HTTPErrors.MethodNotAllowedError(message);`
+* `HTTPErrors.NotAcceptableError(message);`
+* `HTTPErrors.ProxyAuthenticationRequiredError(message);`
+* `HTTPErrors.RequestTimeoutError(message);`
+* `HTTPErrors.ConflictError(message);`
+* `HTTPErrors.GoneError(message);`
+* `HTTPErrors.LengthRequiredError(message);`
+* `HTTPErrors.PreconditionFailedError(message);`
+* `HTTPErrors.RequestEntityTooLargeError(message);`
+* `HTTPErrors.RequestURITooLargeError(message);`
+* `HTTPErrors.UnsupportedMediaTypeError(message);`
+* `HTTPErrors.RequestedRangeNotSatisfiableError(message);`
+* `HTTPErrors.ExpectationFailedError(message);`
+* `HTTPErrors.ImATeapotError(message);`
+* `HTTPErrors.UnprocessableEntityError(message);`
+* `HTTPErrors.LockedError(message);`
+* `HTTPErrors.FailedDependencyError(message);`
+* `HTTPErrors.UnorderedCollectionError(message);`
+* `HTTPErrors.UpgradeRequiredError(message);`
+* `HTTPErrors.PreconditionRequiredError(message);`
+* `HTTPErrors.TooManyRequestsError(message);`
+* `HTTPErrors.RequestHeaderFieldsTooLargeError(message);`
+* `HTTPErrors.InternalServerError(message);`
+* `HTTPErrors.NotImplementedError(message);`
+* `HTTPErrors.BadGatewayError(message);`
+* `HTTPErrors.ServiceUnavailableError(message);`
+* `HTTPErrors.GatewayTimeoutError(message);`
+* `HTTPErrors.HTTPVersionNotSupportedError(message);`
+* `HTTPErrors.VariantAlsoNegotiatesError(message);`
+* `HTTPErrors.InsufficientStorageError(message);`
+* `HTTPErrors.BandwidthLimitExceededError(message);`
+* `HTTPErrors.NotExtendedError(message);`
+* `HTTPErrors.NetworkAuthenticationRequiredError(message);`
 
 ## Source
 Annotated source code is available at http://jproulx.github.io/node-http-error
