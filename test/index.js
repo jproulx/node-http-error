@@ -13,6 +13,20 @@ describe('HTTP Errors', function () {
         Constructor.prototype.should.have.property('constructor');
         return done();
     });
+    it('should validate the arguments properly', function (done) {
+        function create (code) {
+            return function () {
+                return errors.createHTTPError(code);
+            };
+        }
+        create().should.throw();
+        create(200).should.throw();
+        create('Not Found').should.not.throw();
+        create('Not a Valid Error').should.throw();
+        create(600).should.throw();
+        create(404).should.not.throw();
+        return done();
+    });
     it('should extend the built-in Error type properly when called with new', function (done) {
         var Constructor = errors.createHTTPError(404);
         var error = new Constructor();
