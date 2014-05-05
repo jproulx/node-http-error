@@ -49,7 +49,7 @@ exports.createHTTPError = function createHTTPError (code) {
             var proxy = Error.apply(null, arguments);
             // Capture the stack trace and ignore the wrapper functions in the stack.
             // We capture this trace on the proxy object then copy it over later.
-            Error.captureStackTrace(proxy, HTTPError);
+            Error.captureStackTrace(proxy, this.constructor);
             Object.getOwnPropertyNames(proxy).forEach(function (property) {
                 properties[property] = Object.getOwnPropertyDescriptor(proxy, property);
             });
@@ -77,7 +77,7 @@ exports.createHTTPError = function createHTTPError (code) {
  */
 Object.keys(http.STATUS_CODES).forEach(function (code, index, list) {
     if (code >= 400) {
-        var name = http.STATUS_CODES[code].split(' ').join('').replace(/[^a-z]/gi, '') + 'Error';
+        var name = http.STATUS_CODES[code].split(' ').join('').replace(/Error$/, '').replace(/[^a-z]/gi, '') + 'Error';
         this[name] = this.createHTTPError(code);
     }
 }.bind(exports));
