@@ -29,5 +29,8 @@
   "bugs": {
     "url": "https://github.com/jproulx/node-http-error/issues"
   },
-  "homepage": "https://jproulx.github.io/node-http-error"
+  "homepage": "https://jproulx.github.io/node-http-error",
+  "dependencies": {
+    "custom-error-generator": "^2.0.0"
+  }
 }

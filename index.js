@@ -9,9 +9,10 @@
 // `status` The HTTP status string
 
 "use strict";
-var http    = require('http');
-var assert  = require('assert');
-var reverse = {};
+var http        = require('http');
+var assert      = require('assert');
+var customError = require('custom-error-generator');
+var reverse     = {};
 /**
  * Create a custom error class based on an HTTP status code
  *
@@ -34,70 +35,11 @@ exports.createHTTPError = function createHTTPError (code) {
     assert(!isNaN(code), 'Code needs to be a valid Number');
     assert(code >= 400, 'Code needs to be a valid error status');
     assert(typeof http.STATUS_CODES[code] == 'string', 'Code does not exist');
-
-
-    // Create our constructor function specific to this status code
-    function HTTPError (message) {
-        // If the constructor was called with the `new` operator, set up a custom object
-        // closely resembling a built-in `Error`
-        if (this instanceof HTTPError) {
-            // Setup the initial custom properties
-            var properties = {
-                'name' : {
-                    'value'        : [code, http.STATUS_CODES[code]].join(' '),
-                    'enumerable'   : false,
-                    'writable'     : true,
-                    'configurable' : true
-                },
-                'code' : {
-                    'value'        : code,
-                    'enumerable'   : false,
-                    'writable'     : true,
-                    'configurable' : true
-                },
-                'status' : {
-                    'value'        : http.STATUS_CODES[code],
-                    'enumerable'   : false,
-                    'writable'     : true,
-                    'configurable' : true
-                }
-            };
-            // A preferred method for inheriting a class in Javascript
-            // is to call its constructor within the subclass with the same arguments.
-            // However, when Error is called as a function rather than as a constructor,
-            // it creates and initialises a new Error object instead, as a language shortcut.
-            // Hence: `new Error(message);` is functionally equivalent to `Error(message);`
-
-            // What we can do instead is to create a proxy error object,
-            var proxy = Error.apply(null, arguments);
-
-            // capture the stack trace at the appropriate stack location,
-            Error.captureStackTrace(proxy, this.constructor);
-
-            // then iterate over the proxy error properties and assign them to our custom
-            // error object.
-            Object.getOwnPropertyNames(proxy).forEach(function (property) {
-                properties[property] = Object.getOwnPropertyDescriptor(proxy, property);
-            });
-            Object.defineProperties(this, properties);
-
-        // If this constructor was called without the `new` operator, simply
-        // mimic the language shorthand and return a new error
-        } else {
-            return new HTTPError(message);
-        }
-    }
-    // Borrow from Node's `util.inherits` method, assign the correct prototype
-    // and constructor to the new error class. We do not require the _super property here.
-    HTTPError.prototype = Object.create(Error.prototype, {
-        'constructor' : {
-            'value'        : HTTPError,
-            'enumerable'   : false,
-            'writable'     : true,
-            'configurable' : true
-        }
+    var name = [code, http.STATUS_CODES[code]].join(' ');
+    return customError(name, {
+        'code'   : code,
+        'status' : http.STATUS_CODES[code]
     });
-    return HTTPError;
 };
 // For each defined error code in the built-in list of statuses, create a
 // corresponding error shortcut and export it
