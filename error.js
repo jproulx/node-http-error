@@ -1,24 +1,18 @@
-
-// ## HTTPError
-// The HTTPError class extends the built-in Error object, and has the following custom members:
-
-// `code` The numeric HTTP status code
-
-// `status` The HTTP status string
-
 "use strict";
 var http        = require('http');
 var assert      = require('assert');
 var customError = require('custom-error-generator');
 var reverse     = {};
 var names       = {};
+exports.HTTPError = customError('HTTPError', {}, TypeError);
 /**
  * Create a custom error class based on an HTTP status code
  *
  * @function createHTTPError
  * @public
  * @param   {Number|String}     code    The HTTP status code to derive the error message from
- * @return  {HTTPError}
+ * @param   {String}            name    Optional name for Error class
+ * @return  {HTTPStatusError}
  *
  * @example
  *     var HTTPErrors = require('errors');
@@ -46,15 +40,15 @@ exports.createHTTPError = function createHTTPError (code, name) {
     return customError(name, {
         'code'   : code,
         'status' : http.STATUS_CODES[code]
-    });
+    }, exports.HTTPError);
 };
 // For each defined error code in the built-in list of statuses, create a
 // corresponding error shortcut and export it
 Object.keys(http.STATUS_CODES).forEach(function (code, index, list) {
-    reverse[http.STATUS_CODES[code]] = code;
     if (code >= 400) {
         var name = http.STATUS_CODES[code].replace(/( [a-z])/g, function ($1) { return $1.toUpperCase(); }).replace(/Error$/, '').replace(/[^a-z]/gi, '') + 'Error';
         names[code] = name;
+        reverse[http.STATUS_CODES[code]] = code;
         this[name] = this.createHTTPError(code, name);
     }
 }.bind(exports));
