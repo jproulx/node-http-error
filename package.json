@@ -2,7 +2,7 @@
   "name": "http-custom-errors",
   "version": "6.0.0",
   "description": "Custom error classes based on HTTP statuses",
-  "main": "index.js",
+  "main": "error.js",
   "scripts": {
     "test": "make test"
   },
@@ -17,7 +17,13 @@
   "license": "ISC",
   "devDependencies": {
     "mocha": "",
-    "should": ""
+    "should": "",
+    "jshint": "^2.5.0",
+    "blanket": "^1.1.6",
+    "mocha-lcov-reporter": "0.0.1",
+    "coveralls": "^2.10.0",
+    "codeclimate-test-reporter": "0.0.3",
+    "travis-cov": "^0.2.5"
   },
   "directories": {
     "test": "test"
@@ -32,5 +38,14 @@
   "homepage": "https://jproulx.github.io/node-http-error",
   "dependencies": {
     "custom-error-generator": ""
+  },
+  "config": {
+    "blanket": {
+      "pattern": "/error.js",
+      "data-cover-never": "node_modules"
+    },
+    "travis-cov": {
+      "threshold": 80
+    }
   }
 }
