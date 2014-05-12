@@ -9,6 +9,101 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
       "type": "file",
       "data": {
         "language": {
+          "nameMatchers": [".md", ".markdown", ".mkd", ".mkdn", ".mdown"],
+          "commentsOnly": true,
+          "name": "Markdown"
+        },
+        "sourcePath": "/Users/jproulx/Projects/node-http-errors/README.md",
+        "projectPath": "README.md",
+        "targetPath": "index",
+        "pageTitle": "index",
+        "firstHeader": {
+          "type": "heading",
+          "data": {
+            "level": 1,
+            "title": "http-custom-errors",
+            "slug": "http-custom-errors",
+            "isFileHeader": true
+          },
+          "depth": 1,
+          "children": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 2,
+                "title": "Install",
+                "slug": "install"
+              },
+              "depth": 2
+            }, {
+              "type": "heading",
+              "data": {
+                "level": 2,
+                "title": "Usage",
+                "slug": "usage"
+              },
+              "depth": 2
+            }, {
+              "type": "heading",
+              "data": {
+                "level": 2,
+                "title": "Source",
+                "slug": "source"
+              },
+              "depth": 2
+            }, {
+              "type": "heading",
+              "data": {
+                "level": 2,
+                "title": "Notes",
+                "slug": "notes"
+              },
+              "depth": 2
+            }
+          ]
+        },
+        "title": "http-custom-errors"
+      },
+      "depth": 1,
+      "outline": [
+        {
+          "type": "heading",
+          "data": {
+            "level": 2,
+            "title": "Install",
+            "slug": "install"
+          },
+          "depth": 2
+        }, {
+          "type": "heading",
+          "data": {
+            "level": 2,
+            "title": "Usage",
+            "slug": "usage"
+          },
+          "depth": 2
+        }, {
+          "type": "heading",
+          "data": {
+            "level": 2,
+            "title": "Source",
+            "slug": "source"
+          },
+          "depth": 2
+        }, {
+          "type": "heading",
+          "data": {
+            "level": 2,
+            "title": "Notes",
+            "slug": "notes"
+          },
+          "depth": 2
+        }
+      ]
+    }, {
+      "type": "file",
+      "data": {
+        "language": {
           "nameMatchers": [".js"],
           "pygmentsLexer": "javascript",
           "multiLineComment": ["/*", "*", "*/"],
@@ -17,11 +112,11 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
           "foldPrefix": "^",
           "name": "JavaScript"
         },
-        "sourcePath": "/Users/jproulx/Projects/node-http-errors/index.js",
-        "projectPath": "index.js",
-        "targetPath": "index",
-        "pageTitle": "index",
-        "title": "index"
+        "sourcePath": "/Users/jproulx/Projects/node-http-errors/error.js",
+        "projectPath": "error.js",
+        "targetPath": "error",
+        "pageTitle": "error",
+        "title": "error"
       },
       "depth": 1,
       "outline": [

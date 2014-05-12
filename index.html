@@ -1,42 +1,106 @@
-<!DOCTYPE html><html lang="en"><head><title>index</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content=""><meta name="groc-document-path" content="index"><meta name="groc-project-path" content="index.js"><meta name="groc-github-url" content="https://github.com/jproulx/node-http-error"><link rel="stylesheet" type="text/css" media="all" href="assets/style.css"><script type="text/javascript" src="assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/jproulx/node-http-error/blob/master/index.js">index.js</a></div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="cm">/*jshint node: true */</span>
-<span class="cm">/*globals require, exports, console, Error */</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h2 id="httperror">HTTPError</h2>
+<!DOCTYPE html><html lang="en"><head><title>index</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content=""><meta name="groc-document-path" content="index"><meta name="groc-project-path" content="README.md"><meta name="groc-github-url" content="https://github.com/jproulx/node-http-error"><link rel="stylesheet" type="text/css" media="all" href="assets/style.css"><script type="text/javascript" src="assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/jproulx/node-http-error/blob/master/README.md">README.md</a></div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="http-custom-errors">http-custom-errors</h1>
 
-<p>The HTTPError class extends the built-in Error object, and has the following custom members:</p></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p><code>code</code> The numeric HTTP status code</p></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p><code>status</code> The HTTP status string</p></div></div><div class="code"><div class="wrapper"><span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
-<span class="kd">var</span> <span class="nx">http</span>        <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;http&#39;</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">assert</span>      <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;assert&#39;</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">customError</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;custom-error-generator&#39;</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">reverse</span>     <span class="o">=</span> <span class="p">{};</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-public"><div class="wrapper"><p><span class='doc-section-header'>Public function createHTTPError</span></p>
+<p><a href="https://travis-ci.org/jproulx/node-http-error"><img src="https://travis-ci.org/jproulx/node-http-error.svg?branch=master" alt="Build Status" title="" /></a></p>
 
-<p>Create a custom error class based on an HTTP status code</p>
+<p>Custom error classes based on HTTP statuses, designed to emulate the language specifications for Error exceptions as best as possible.</p>
 
-<p>Parameters:</p>
+<h2 id="install">Install</h2>
+
+<pre><code class="bash">npm install http-custom-errors
+</code></pre>
+
+<h2 id="usage">Usage</h2>
+
+<pre><code class="js">var HTTPErrors = require('http-custom-errors');
+var error = HTTPErrors.createHTTPError(500); // Create a "500 Internal Server Error" exception
+throw new HTTPErrors.NotFoundError('/missing'); // Throw a "404 Not Found Error" exception
+</code></pre>
+
+<p>The <code>createHTTPError(code);</code> function export will inherit and return a new error exception, with the additional <code>code</code> and <code>status</code> fields that correspond to the HTTP Server Statuses advertised by node's internal HTTP module.</p>
+
+<p>One practical use would allow you to use a polymorphic error handler with <code>express.js</code>:</p>
+
+<pre><code class="js">app.use(function (err, res, req, next) {
+  res.status(err.code || 500);
+  // respond with html page
+  if (req.accepts('html')) {
+    return res.render(err.code || 500, { url: req.url });
+  }
+  // respond with json
+  if (req.accepts('json')) {
+    res.send({ 'message' : err.message || 'Server Error' });
+    return;
+  }
+  // default to plain-text. send()
+  res.type('txt').send(err.message || 'Server Error');
+});
+</code></pre>
+
+<p>With this middleware you would be able to simply throw the appropriate HTTP status error in the right situation:</p>
+
+<pre><code class="js">function authorize (req, res, next) {
+    if (// not authorized logic) {
+        return next(new HTTPErrors.ForbiddenError('Please log in'));
+    }
+    return next();
+});
+app.get('/sensitive', authorize, function (req, res, next) {
+    return res.render('logged_in');
+});
+app.use(function (req, res, next) {
+    throw new HTTPErrors.NotFoundError(req.url);
+});
+</code></pre>
+
+<p>Additionally, each error type is exposed as its own Error constructor:</p>
 
 <ul>
-<li><strong>code can be a Number or a String.</strong><br/>(The HTTP status code to derive the error message from)</li>
+<li><code>HTTPErrors.BadRequestError(message);</code></li>
+<li><code>HTTPErrors.UnauthorizedError(message);</code></li>
+<li><code>HTTPErrors.PaymentRequiredError(message);</code></li>
+<li><code>HTTPErrors.ForbiddenError(message);</code></li>
+<li><code>HTTPErrors.NotFoundError(message);</code></li>
+<li><code>HTTPErrors.MethodNotAllowedError(message);</code></li>
+<li><code>HTTPErrors.NotAcceptableError(message);</code></li>
+<li><code>HTTPErrors.ProxyAuthenticationRequiredError(message);</code></li>
+<li><code>HTTPErrors.RequestTimeoutError(message);</code></li>
+<li><code>HTTPErrors.ConflictError(message);</code></li>
+<li><code>HTTPErrors.GoneError(message);</code></li>
+<li><code>HTTPErrors.LengthRequiredError(message);</code></li>
+<li><code>HTTPErrors.PreconditionFailedError(message);</code></li>
+<li><code>HTTPErrors.RequestEntityTooLargeError(message);</code></li>
+<li><code>HTTPErrors.RequestURITooLargeError(message);</code></li>
+<li><code>HTTPErrors.UnsupportedMediaTypeError(message);</code></li>
+<li><code>HTTPErrors.RequestedRangeNotSatisfiableError(message);</code></li>
+<li><code>HTTPErrors.ExpectationFailedError(message);</code></li>
+<li><code>HTTPErrors.ImATeapotError(message);</code></li>
+<li><code>HTTPErrors.UnprocessableEntityError(message);</code></li>
+<li><code>HTTPErrors.LockedError(message);</code></li>
+<li><code>HTTPErrors.FailedDependencyError(message);</code></li>
+<li><code>HTTPErrors.UnorderedCollectionError(message);</code></li>
+<li><code>HTTPErrors.UpgradeRequiredError(message);</code></li>
+<li><code>HTTPErrors.PreconditionRequiredError(message);</code></li>
+<li><code>HTTPErrors.TooManyRequestsError(message);</code></li>
+<li><code>HTTPErrors.RequestHeaderFieldsTooLargeError(message);</code></li>
+<li><code>HTTPErrors.InternalServerError(message);</code></li>
+<li><code>HTTPErrors.NotImplementedError(message);</code></li>
+<li><code>HTTPErrors.BadGatewayError(message);</code></li>
+<li><code>HTTPErrors.ServiceUnavailableError(message);</code></li>
+<li><code>HTTPErrors.GatewayTimeoutError(message);</code></li>
+<li><code>HTTPErrors.HTTPVersionNotSupportedError(message);</code></li>
+<li><code>HTTPErrors.VariantAlsoNegotiatesError(message);</code></li>
+<li><code>HTTPErrors.InsufficientStorageError(message);</code></li>
+<li><code>HTTPErrors.BandwidthLimitExceededError(message);</code></li>
+<li><code>HTTPErrors.NotExtendedError(message);</code></li>
+<li><code>HTTPErrors.NetworkAuthenticationRequiredError(message);</code></li>
 </ul>
 
-<p><strong>Returns a HTTPError</strong></p>
+<h2 id="source">Source</h2>
 
-<p>Example:</p>
+<p>Annotated source code is available at http://jproulx.github.io/node-http-error</p>
 
-<pre><code>var HTTPErrors = require('errors');
-throw new HTTPErrors.NotFoundError('/missing');
-</code></pre></div></div><div class="code"><div class="wrapper"><span class="nx">exports</span><span class="p">.</span><span class="nx">createHTTPError</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">createHTTPError</span> <span class="p">(</span><span class="nx">code</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Attempt to look up the code from the reverse map</p></div></div><div class="code"><div class="wrapper">    <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">code</span> <span class="o">==</span> <span class="s1">&#39;string&#39;</span> <span class="o">&amp;&amp;</span> <span class="nb">isNaN</span><span class="p">(</span><span class="nb">parseInt</span><span class="p">(</span><span class="nx">code</span><span class="p">,</span> <span class="mi">10</span><span class="p">)))</span> <span class="p">{</span>
-        <span class="nx">code</span> <span class="o">=</span> <span class="nx">reverse</span><span class="p">[</span><span class="nx">code</span><span class="p">];</span>
-    <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Validate status code</p></div></div><div class="code"><div class="wrapper">    <span class="nx">code</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">code</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
-    <span class="nx">assert</span><span class="p">(</span><span class="o">!</span><span class="nb">isNaN</span><span class="p">(</span><span class="nx">code</span><span class="p">),</span> <span class="s1">&#39;Code needs to be a valid Number&#39;</span><span class="p">);</span>
-    <span class="nx">assert</span><span class="p">(</span><span class="nx">code</span> <span class="o">&gt;=</span> <span class="mi">400</span><span class="p">,</span> <span class="s1">&#39;Code needs to be a valid error status&#39;</span><span class="p">);</span>
-    <span class="nx">assert</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">http</span><span class="p">.</span><span class="nx">STATUS_CODES</span><span class="p">[</span><span class="nx">code</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="s1">&#39;Code does not exist&#39;</span><span class="p">);</span>
-    <span class="kd">var</span> <span class="nx">name</span> <span class="o">=</span> <span class="p">[</span><span class="nx">code</span><span class="p">,</span> <span class="nx">http</span><span class="p">.</span><span class="nx">STATUS_CODES</span><span class="p">[</span><span class="nx">code</span><span class="p">]].</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">);</span>
-    <span class="k">return</span> <span class="nx">customError</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="p">{</span>
-        <span class="s1">&#39;code&#39;</span>   <span class="o">:</span> <span class="nx">code</span><span class="p">,</span>
-        <span class="s1">&#39;status&#39;</span> <span class="o">:</span> <span class="nx">http</span><span class="p">.</span><span class="nx">STATUS_CODES</span><span class="p">[</span><span class="nx">code</span><span class="p">]</span>
-    <span class="p">});</span>
-<span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>For each defined error code in the built-in list of statuses, create a
-corresponding error shortcut and export it</p></div></div><div class="code"><div class="wrapper"><span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nx">STATUS_CODES</span><span class="p">).</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">code</span><span class="p">,</span> <span class="nx">index</span><span class="p">,</span> <span class="nx">list</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">reverse</span><span class="p">[</span><span class="nx">http</span><span class="p">.</span><span class="nx">STATUS_CODES</span><span class="p">[</span><span class="nx">code</span><span class="p">]]</span> <span class="o">=</span> <span class="nx">code</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">code</span> <span class="o">&gt;=</span> <span class="mi">400</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">name</span> <span class="o">=</span> <span class="nx">http</span><span class="p">.</span><span class="nx">STATUS_CODES</span><span class="p">[</span><span class="nx">code</span><span class="p">].</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/( [a-z])/g</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">$1</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">$1</span><span class="p">.</span><span class="nx">toUpperCase</span><span class="p">();</span> <span class="p">}).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/Error$/</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/[^a-z]/gi</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;Error&#39;</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">[</span><span class="nx">name</span><span class="p">]</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">createHTTPError</span><span class="p">(</span><span class="nx">code</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}.</span><span class="nx">bind</span><span class="p">(</span><span class="nx">exports</span><span class="p">));</span></div></div></div></div></body></html>
+<h2 id="notes">Notes</h2>
+
+<p>Care is taken to preserve the built-in error handling behavior as much as possible, with support for checking <code>instanceof</code> and <code>typeof</code>, as well as making sure the error constructor behaves the same whether it is called with the <code>new</code> operator or not.</p>
+
+<p>In other words, you shouldn't have to worry about these errors affecting your syntax or existing code. Simply drop in place for any existing errors you're throwing and it should work just the same.</p></div></div></div></div></body></html>
