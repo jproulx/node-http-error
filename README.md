@@ -1,8 +1,14 @@
 http-custom-errors
 ==================
-[![Build Status](https://travis-ci.org/jproulx/node-http-error.svg?branch=master)](https://travis-ci.org/jproulx/node-http-error)
+[![Build Status](http://img.shields.io/travis/jproulx/node-http-error.svg)](https://travis-ci.org/jproulx/node-custom-error)
+[![Code Climate](http://img.shields.io/codeclimate/github/jproulx/node-http-error.svg)](https://codeclimate.com/github/jproulx/node-custom-error)
+[![Coverage Status](http://img.shields.io/coveralls/jproulx/node-http-error.svg)](https://coveralls.io/r/jproulx/node-custom-error?branch=master)
+[![Dependency Status](http://img.shields.io/gemnasium/jproulx/node-http-error.svg)](https://gemnasium.com/jproulx/node-custom-error)
 
-Custom error classes based on HTTP statuses, designed to emulate the language specifications for Error exceptions as best as possible.
+[![NPM](https://nodei.co/npm/http-custom-errors.png)](https://nodei.co/npm/http-custom-errors/)
+
+Custom errors based on HTTP status codes -- http://jproulx.github.io/node-http-error
+
 ## Install
 ```bash
 npm install http-custom-errors
@@ -87,9 +93,6 @@ Additionally, each error type is exposed as its own Error constructor:
 * `HTTPErrors.BandwidthLimitExceededError(message);`
 * `HTTPErrors.NotExtendedError(message);`
 * `HTTPErrors.NetworkAuthenticationRequiredError(message);`
-
-## Source
-Annotated source code is available at http://jproulx.github.io/node-http-error
 
 ## Notes
 Care is taken to preserve the built-in error handling behavior as much as possible, with support for checking `instanceof` and `typeof`, as well as making sure the error constructor behaves the same whether it is called with the `new` operator or not.
