@@ -18,12 +18,12 @@
   "devDependencies": {
     "mocha": "",
     "should": "",
-    "jshint": "^2.5.0",
-    "blanket": "^1.1.6",
-    "mocha-lcov-reporter": "0.0.1",
-    "coveralls": "^2.10.0",
-    "codeclimate-test-reporter": "0.0.3",
-    "travis-cov": "^0.2.5"
+    "jshint": "",
+    "blanket": "",
+    "mocha-lcov-reporter": "",
+    "coveralls": "",
+    "codeclimate-test-reporter": "",
+    "travis-cov": ""
   },
   "directories": {
     "test": "test"
