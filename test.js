@@ -27,7 +27,6 @@ describe('HTTP Errors', function () {
     it('should have a proper code property', function (done) {
         var error = new errors.NotFoundError('Testing');
         error.should.have.property('code');
-        error.should.not.have.enumerable('code');
         error.code.should.be.equal(404);
         error.code.should.be.exactly(404);
         return done();
@@ -35,7 +34,6 @@ describe('HTTP Errors', function () {
     it('should have a proper status property', function (done) {
         var error = new errors.NotFoundError('Testing');
         error.should.have.property('status');
-        error.should.not.have.enumerable('status');
         error.status.should.be.equal(http.STATUS_CODES[404]);
         return done();
     });
