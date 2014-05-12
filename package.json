@@ -1,6 +1,6 @@
 {
   "name": "http-custom-errors",
-  "version": "7.0.0",
+  "version": "8.0.0",
   "description": "Custom error classes based on HTTP statuses",
   "main": "error.js",
   "scripts": {
