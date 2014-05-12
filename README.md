@@ -1,9 +1,9 @@
 http-custom-errors
 ==================
-[![Build Status](http://img.shields.io/travis/jproulx/node-http-error.svg)](https://travis-ci.org/jproulx/node-custom-error)
-[![Code Climate](http://img.shields.io/codeclimate/github/jproulx/node-http-error.svg)](https://codeclimate.com/github/jproulx/node-custom-error)
-[![Coverage Status](http://img.shields.io/coveralls/jproulx/node-http-error.svg)](https://coveralls.io/r/jproulx/node-custom-error?branch=master)
-[![Dependency Status](http://img.shields.io/gemnasium/jproulx/node-http-error.svg)](https://gemnasium.com/jproulx/node-custom-error)
+[![Build Status](http://img.shields.io/travis/jproulx/node-http-error.svg)](https://travis-ci.org/jproulx/node-http-error)
+[![Code Climate](http://img.shields.io/codeclimate/github/jproulx/node-http-error.svg)](https://codeclimate.com/github/jproulx/node-http-error)
+[![Coverage Status](http://img.shields.io/coveralls/jproulx/node-http-error.svg)](https://coveralls.io/r/jproulx/node-http-error?branch=master)
+[![Dependency Status](http://img.shields.io/gemnasium/jproulx/node-http-error.svg)](https://gemnasium.com/jproulx/node-http-error)
 
 [![NPM](https://nodei.co/npm/http-custom-errors.png)](https://nodei.co/npm/http-custom-errors/)
 
