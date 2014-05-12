@@ -29,6 +29,8 @@ describe('HTTP Errors', function () {
         create("404").should.not.throw();
         create(600).should.throw(TypeError);
         create(404).should.not.throw();
+        create(302).should.throw(TypeError);
+        create(450).should.throw(TypeError);
         return done();
     });
     it('should have a proper code property', function (done) {
